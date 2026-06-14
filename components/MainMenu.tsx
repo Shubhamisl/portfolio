@@ -4,12 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { sfx } from "@/lib/sound";
 
 const ITEMS = [
-  { id: "top", label: "STATUS", icon: "✦", desc: "Character overview" },
-  { id: "stats", label: "MAGIC / SKILLS", icon: "◈", desc: "Stat allocation" },
+  { id: "top", label: "STATUS", icon: "✦", desc: "Overview" },
+  { id: "stats", label: "MAGITEK / SKILLS", icon: "◈", desc: "Stats" },
   { id: "quests", label: "QUEST LOG", icon: "⚑", desc: "Experience" },
-  { id: "dungeons", label: "DUNGEONS", icon: "⚔", desc: "Projects" },
-  { id: "lore", label: "LORE", icon: "✧", desc: "Education & trophies" },
-  { id: "save", label: "SAVE / CONTACT", icon: "◆", desc: "Get in touch" },
+  { id: "dungeons", label: "WORLD MAP", icon: "⚔", desc: "Projects" },
+  { id: "lore", label: "RECORDS HALL", icon: "✧", desc: "Education" },
+  { id: "save", label: "SAVE POINT", icon: "◆", desc: "Contact" },
 ];
 
 export default function MainMenu() {
@@ -24,9 +24,8 @@ export default function MainMenu() {
   const jump = useCallback((i: number) => {
     const it = ITEMS[i];
     sfx.confirm();
-    const el = it.id === "top" ? document.body : document.getElementById(it.id);
-    el?.scrollIntoView({ behavior: "smooth", block: "start" });
     if (it.id === "top") window.scrollTo({ top: 0, behavior: "smooth" });
+    else document.getElementById(it.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
     setOpen(false);
   }, []);
 
@@ -57,14 +56,13 @@ export default function MainMenu() {
 
   return (
     <>
-      {/* trigger */}
       <button
         aria-label="Open menu"
         onClick={() => {
           setOpen(true);
           sfx.open();
         }}
-        className="fixed bottom-4 left-4 z-[130] border-2 border-[var(--rpg-gold)] bg-[rgba(12,10,22,0.9)] px-3 py-2 font-pixel text-[0.55rem] text-[var(--rpg-gold)] shadow-[3px_3px_0_rgba(0,0,0,0.6)] transition-transform hover:translate-x-0.5 hover:translate-y-0.5"
+        className="ff-btn fixed bottom-4 left-4 z-[130] text-sm"
       >
         ☰ MENU [M]
       </button>
@@ -72,27 +70,29 @@ export default function MainMenu() {
       {open && (
         <div className="menu-overlay flex items-center justify-center px-4" onClick={close}>
           <div
-            className="frame-gold frame-studs w-full max-w-md p-6"
+            className="ff-window ff-window--glow w-full max-w-md p-6"
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="banner mb-1 !text-[0.8rem]">▌MENU</p>
-            <p className="mb-4 text-lg text-[var(--muted)]">↑ ↓ navigate · ENTER select · ESC close</p>
+            <span className="ff-title-chip text-sm">❖ MENU ❖</span>
+            <p className="mb-4 mt-2 font-pixel text-sm text-[var(--ink-dim)] shadow-ink">
+              ↑ ↓ navigate · ENTER select · ESC close
+            </p>
             <ul>
               {ITEMS.map((it, i) => (
                 <li
                   key={it.id}
-                  className="menu-item"
-                  data-active={i === idx}
+                  className={`ff-row flex items-center gap-3 ${i === idx ? "is-active" : ""}`}
                   onMouseEnter={() => {
                     setIdx(i);
                     sfx.hover();
                   }}
                   onClick={() => jump(i)}
                 >
-                  <span className="w-4 text-[var(--rpg-gold)]">{i === idx ? "▶" : ""}</span>
-                  <span className="text-[var(--rpg-cyan)]">{it.icon}</span>
-                  <span className="font-pixel text-[0.6rem]">{it.label}</span>
-                  <span className="ml-auto text-base text-[var(--muted)]">{it.desc}</span>
+                  <span className="text-[var(--mp-blue)]">{it.icon}</span>
+                  <span className="font-pixel text-base text-[var(--ink)] shadow-ink">{it.label}</span>
+                  <span className="ml-auto font-pixel text-sm text-[var(--gold)] shadow-gold">
+                    {it.desc}
+                  </span>
                 </li>
               ))}
             </ul>

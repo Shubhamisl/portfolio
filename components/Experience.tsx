@@ -66,6 +66,7 @@ export default function Experience({ children }: { children: ReactNode }) {
   return (
     <>
       <Starfield />
+      <div className="scanlines" aria-hidden />
       <div className="vignette" aria-hidden />
       <div ref={flashRef} className="flash" aria-hidden />
 

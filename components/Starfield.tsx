@@ -16,7 +16,8 @@ export default function Starfield() {
     let w = (canvas.width = window.innerWidth);
     let h = (canvas.height = window.innerHeight);
 
-    const colors = ["#f2c14e", "#6aa3ff", "#a779ff", "#56d4d4", "#ece8ff"];
+    // magicite dust: violet, gold, blue, cool-white
+    const colors = ["#b060e0", "#f0c040", "#48a0e8", "#f4f4fc", "#8890c8"];
     type Star = { x: number; y: number; z: number; s: number; c: string; tw: number };
     const stars: Star[] = Array.from({ length: 130 }, () => ({
       x: Math.random() * w,

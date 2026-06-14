@@ -5,62 +5,70 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap";
 import { contacts, hero } from "@/lib/data";
 import TypeLine from "./TypeLine";
+import FFWindow from "./FFWindow";
 
 export default function SavePoint() {
   const ref = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
-      gsap.from(".save-crystal", {
-        scale: 0.5,
-        opacity: 0,
-        duration: 0.6,
-        ease: "steps(8)",
-        scrollTrigger: { trigger: ref.current, start: "top 80%", once: true },
+      gsap.to(".save-glyph", { rotate: 360, repeat: -1, duration: 8, ease: "none" });
+      gsap.to(".save-glyph", {
+        filter: "drop-shadow(0 0 18px var(--magic-violet))",
+        yoyo: true,
+        repeat: -1,
+        duration: 1.4,
+        ease: "sine.inOut",
       });
     },
     { scope: ref }
   );
 
-  const links = [
+  const slots = [
     { label: "EMAIL", value: contacts.email, href: `mailto:${contacts.email}` },
     { label: "PHONE", value: contacts.phone, href: `tel:${contacts.phone.replace(/\s/g, "")}` },
-    { label: "GITHUB", value: "View repos", href: contacts.github },
+    { label: "GITHUB", value: "View repositories", href: contacts.github },
     { label: "LINKEDIN", value: "Connect", href: contacts.linkedin },
   ];
 
   return (
-    <section id="save" ref={ref} className="mx-auto max-w-4xl scroll-mt-24 px-4 py-24 text-center">
-      <div className="save-crystal mx-auto mb-6 h-14 w-14 rotate-45 border-4 border-[var(--rpg-cyan)] bg-[var(--panel)] shadow-[0_0_24px_var(--rpg-cyan)]" />
-      <p className="banner">◆ SAVE POINT</p>
-      <h2 className="mt-4 font-pixel text-base text-[var(--ink)] sm:text-lg">
-        <TypeLine text="JOIN THE PARTY?" />
-      </h2>
-      <p className="mx-auto mt-4 max-w-lg text-2xl text-[var(--muted)]">
-        {hero.name} is available for full-stack and AI-integration quests. Send word to recruit.
-      </p>
-
-      <div className="mt-10 grid gap-4 sm:grid-cols-2">
-        {links.map((l) => (
-          <a
-            key={l.label}
-            href={l.href}
-            className="frame-gold frame-studs group flex items-center justify-between p-4 text-left transition-transform hover:-translate-y-1"
-          >
-            <span className="font-pixel text-[0.55rem] text-[var(--rpg-gold)]">{l.label}</span>
-            <span className="text-xl text-[var(--muted)] group-hover:text-[var(--ink)]">
-              {l.value} ▸
-            </span>
-          </a>
-        ))}
+    <section id="save" ref={ref} className="relative z-10 mx-auto max-w-3xl scroll-mt-24 px-4 py-20">
+      <div className="mb-8 flex flex-col items-center">
+        <div className="save-glyph mb-4 h-12 w-12 rotate-45 border-4 border-[var(--magic-violet)] bg-[#0a0e28]" />
+        <h2 className="font-display text-3xl font-bold uppercase tracking-[0.14em] text-[var(--gold)] shadow-gold">
+          ◆ Save Point
+        </h2>
       </div>
 
-      <footer className="mt-20 border-t-2 border-[var(--panel-edge)] pt-6">
-        <p className="font-pixel text-[0.5rem] text-[var(--muted)]">
-          ⌘ BUILT WITH NEXT.JS · GSAP · TAILWIND
+      <FFWindow title="SAVE / RECRUIT" glow>
+        <p className="font-body text-2xl leading-snug text-[var(--ink)]">
+          <TypeLine text={`${hero.name} is available for full-stack and Magitek (AI) quests. Select a slot to make contact.`} />
         </p>
-        <p className="mt-3 text-lg text-[var(--muted)]">
-          © {new Date().getFullYear()} {hero.name} — GAME OVER? <span className="blink">PRESS START ▶</span>
+
+        <ul className="mt-6">
+          {slots.map((s) => (
+            <li key={s.label} className="ff-row is-active flex items-center gap-3 !border-b-0">
+              <a href={s.href} className="flex w-full items-center justify-between">
+                <span className="font-pixel text-base text-[var(--ink)] shadow-ink">{s.label}</span>
+                <span className="font-body text-lg text-[var(--ink-dim)]">{s.value} ▸</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-6 text-center">
+          <a href={`mailto:${contacts.email}`} className="ff-btn">
+            <span className="blink">►</span> SAVE
+          </a>
+        </div>
+      </FFWindow>
+
+      <footer className="mt-16 text-center">
+        <p className="font-pixel text-sm text-[var(--ink-dim)] shadow-ink">
+          BUILT WITH NEXT.JS · GSAP · TAILWIND
+        </p>
+        <p className="mt-2 font-body text-lg italic text-[var(--ink-dim)]">
+          © {new Date().getFullYear()} {hero.name} — the adventure continues.
         </p>
       </footer>
     </section>

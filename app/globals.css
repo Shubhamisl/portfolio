@@ -1,371 +1,333 @@
 @import "tailwindcss";
 
-/* ============ RPG DESIGN TOKENS ============ */
+/* ============ FF6 DESIGN TOKENS (per DESIGN.md) ============ */
 :root {
-  /* dungeon palette */
-  --bg: #0c0a16;
-  --bg-2: #120f22;
-  --panel: #1a1530;
-  --panel-edge: #322a52;
-  --panel-light: #241d40;
-  --ink: #ece8ff;
-  --muted: #9b93c4;
-  --parchment: #ead8ac;
-  --parchment-ink: #2b2110;
+  --bg-void: #0a0a14;
+  --bg-void-2: #141022;
 
-  /* stat colors */
-  --rpg-hp: #e5484d;
-  --rpg-mp: #6aa3ff;
-  --rpg-xp: #6fdc6f;
-  --rpg-gold: #f2c14e;
-  --rpg-cyan: #56d4d4;
-  --rpg-purple: #a779ff;
+  /* signature window gradient: bright TL -> dark BR */
+  --win-tl: #3858c8;
+  --win-tr: #2a44a8;
+  --win-bl: #1c2e78;
+  --win-br: #101a48;
+  --win-border: #f4f4fc;
+  --win-border-shadow: #8890c8;
 
-  --font-pixel: var(--font-pixel);
-  --font-retro: var(--font-retro);
+  --ink: #ffffff;
+  --ink-shadow: #101038;
+  --ink-dim: #b8c0e8;
+
+  --gold: #f0c040;
+  --gold-deep: #b8860b;
+  --hp-green: #48c048;
+  --mp-blue: #48a0e8;
+  --magic-violet: #b060e0;
+  --danger-red: #e04848;
+  --exp-amber: #e89030;
+
+  --font-display: var(--font-cinzel);
+  --font-pixel: var(--font-pixelify);
+  --font-body: var(--font-spectral);
 }
 
 @theme inline {
-  --color-bg: var(--bg);
-  --color-panel: var(--panel);
+  --color-bg: var(--bg-void);
   --color-ink: var(--ink);
-  --color-muted: var(--muted);
-  --color-gold: var(--rpg-gold);
-  --font-pixel: var(--font-pixel);
-  --font-retro: var(--font-retro);
+  --color-gold: var(--gold);
+  --font-display: var(--font-cinzel);
+  --font-pixel: var(--font-pixelify);
+  --font-body: var(--font-spectral);
 }
 
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
-  background-color: var(--bg);
-  background-image:
-    radial-gradient(circle at 20% 0%, rgba(103, 70, 200, 0.12), transparent 45%),
-    radial-gradient(circle at 85% 30%, rgba(86, 150, 212, 0.1), transparent 40%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
-  background-attachment: fixed;
+  background-color: var(--bg-void);
   color: var(--ink);
-  font-family: var(--font-retro), ui-monospace, monospace;
-  -webkit-font-smoothing: none;
-  text-rendering: geometricPrecision;
+  font-family: var(--font-pixel), ui-monospace, monospace;
   overflow-x: hidden;
 }
 
-/* CRT scanline overlay */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 90;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.13),
-    rgba(0, 0, 0, 0.13) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  mix-blend-mode: multiply;
-  opacity: 0.5;
+/* faint scanline + vignette ambience handled by overlay elements; keep body clean */
+
+/* ============ TYPOGRAPHY ============ */
+.font-display { font-family: var(--font-display), serif; }
+.font-pixel { font-family: var(--font-pixel), monospace; }
+.font-body { font-family: var(--font-body), serif; }
+
+/* mandatory hard 1px indigo text shadow — this IS FF6 text */
+.shadow-ink { text-shadow: 1px 1px 0 var(--ink-shadow); }
+.shadow-gold { text-shadow: 2px 2px 0 var(--gold-deep); }
+.title-stroke {
+  -webkit-text-stroke: 2px var(--ink-shadow);
+  paint-order: stroke fill;
+  text-shadow: 3px 3px 0 var(--gold-deep);
 }
 
-/* ============ TYPE ============ */
-.font-pixel {
-  font-family: var(--font-pixel), monospace;
-  letter-spacing: 0.02em;
-  line-height: 1.5;
-}
-.font-retro {
-  font-family: var(--font-retro), monospace;
-}
-
-/* ============ 9-SLICE-ISH PANEL ============ */
-.rpg-panel {
+/* ============ THE FF6 WINDOW ============ */
+.ff-window {
   position: relative;
-  background: var(--panel);
-  border: 3px solid var(--panel-edge);
+  background: linear-gradient(
+    135deg,
+    var(--win-tl) 0%,
+    var(--win-tr) 35%,
+    var(--win-bl) 70%,
+    var(--win-br) 100%
+  );
+  border: 3px solid var(--win-border);
+  border-radius: 10px;
   box-shadow:
-    0 0 0 3px var(--bg),
-    0 0 0 6px var(--panel-edge),
-    6px 6px 0 0 rgba(0, 0, 0, 0.55);
-  image-rendering: pixelated;
-}
-.rpg-panel--parchment {
-  background:
-    linear-gradient(180deg, #efe0bb 0%, #e2cf9f 100%);
-  border-color: #8a6d3a;
-  color: var(--parchment-ink);
-  box-shadow:
-    0 0 0 3px var(--bg),
-    0 0 0 6px #5c4a28,
-    6px 6px 0 0 rgba(0, 0, 0, 0.5);
-}
-
-/* corner studs */
-.rpg-corner::before,
-.rpg-corner::after {
-  content: "";
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: var(--rpg-gold);
-  top: 4px;
-}
-.rpg-corner::before { left: 4px; }
-.rpg-corner::after { right: 4px; }
-
-/* ============ STAT BAR ============ */
-.bar-track {
-  height: 14px;
-  background: #0a0814;
-  border: 2px solid var(--panel-edge);
-  position: relative;
-  overflow: hidden;
-}
-.bar-fill {
-  height: 100%;
-  width: 0;
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.35) 0%,
-    transparent 12%
-  );
-  position: relative;
-}
-.bar-fill::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.18),
-    rgba(0, 0, 0, 0.18) 2px,
-    transparent 2px,
-    transparent 6px
-  );
-}
-
-/* ============ PIXEL BUTTON ============ */
-.btn-pixel {
-  font-family: var(--font-pixel), monospace;
-  font-size: 0.7rem;
-  background: var(--panel-light);
+    inset 2px 2px 0 rgba(255, 255, 255, 0.25),
+    inset -2px -2px 0 rgba(16, 16, 56, 0.55),
+    0 0 0 1px var(--win-border-shadow),
+    0 8px 24px rgba(0, 0, 0, 0.55);
   color: var(--ink);
-  border: 2px solid var(--rpg-gold);
-  padding: 0.6rem 1rem;
-  box-shadow: 3px 3px 0 0 rgba(0, 0, 0, 0.6);
-  transition: transform 0.08s steps(2), background 0.12s, color 0.12s;
-  cursor: pointer;
+}
+.ff-window--glow {
+  box-shadow:
+    inset 2px 2px 0 rgba(255, 255, 255, 0.25),
+    inset -2px -2px 0 rgba(16, 16, 56, 0.55),
+    inset 0 0 30px rgba(120, 160, 255, 0.18),
+    0 0 0 1px var(--win-border-shadow),
+    0 8px 28px rgba(0, 0, 0, 0.6);
+}
+/* nested sub-window: darker, thinner border */
+.ff-sub {
+  background: linear-gradient(135deg, #1a2c70 0%, #0d1640 100%);
+  border: 2px solid rgba(244, 244, 252, 0.7);
+  border-radius: 7px;
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.18),
+    inset -1px -1px 0 rgba(16, 16, 56, 0.5);
+}
+
+/* window title chip overlapping top border */
+.ff-title-chip {
+  position: absolute;
+  top: -0.95rem;
+  left: 1.25rem;
+  background: var(--bg-void-2);
+  border: 2px solid var(--win-border);
+  border-radius: 6px;
+  padding: 0.15rem 0.8rem;
+  font-family: var(--font-display), serif;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 var(--gold-deep);
+  white-space: nowrap;
+}
+
+/* ============ MENU ROWS + CURSOR ============ */
+.ff-row {
+  position: relative;
+  padding: 0.4rem 0.6rem 0.4rem 1.7rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.1s;
+}
+.ff-row.is-active {
+  background: rgba(240, 192, 64, 0.12);
+}
+.ff-row.is-active::before {
+  content: "\25BA";
+  position: absolute;
+  left: 0.3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  text-shadow: 1px 1px 0 var(--gold-deep);
+  animation: cursorBob 0.6s steps(2) infinite;
+}
+@keyframes cursorBob {
+  0%, 100% { left: 0.3rem; }
+  50% { left: 0.55rem; }
+}
+
+/* gold title sub-bar, e.g. — FRONTEND — */
+.ff-subbar {
+  font-family: var(--font-pixel), monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 var(--gold-deep);
   text-transform: uppercase;
 }
-.btn-pixel:hover {
-  background: var(--rpg-gold);
-  color: var(--bg);
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.6);
-}
 
-/* blinking cursor / prompt */
-.blink {
-  animation: blink 1s steps(2, start) infinite;
-}
-@keyframes blink {
-  to { opacity: 0; }
-}
-
-/* floating idle bob for sprites */
-.bob {
-  animation: bob 2.4s steps(8) infinite;
-}
-@keyframes bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-/* section heading banner */
-.banner {
-  display: inline-block;
-  font-family: var(--font-pixel), monospace;
-  font-size: clamp(0.8rem, 2.5vw, 1.15rem);
-  color: var(--rpg-gold);
-  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8);
-}
-
-/* rarity glows for trophies */
-.rarity-rare { color: var(--rpg-mp); border-color: var(--rpg-mp) !important; }
-.rarity-epic { color: var(--rpg-purple); border-color: var(--rpg-purple) !important; }
-
-/* scrollbar */
-::-webkit-scrollbar { width: 12px; }
-::-webkit-scrollbar-track { background: var(--bg-2); }
-::-webkit-scrollbar-thumb {
-  background: var(--panel-edge);
-  border: 2px solid var(--bg);
-}
-
-/* ============ EXPERIENCE LAYER ============ */
-
-/* white text with hard black outline (classic RPG readability) */
-.text-outline {
-  text-shadow:
-    -2px 0 #000, 2px 0 #000, 0 -2px #000, 0 2px #000,
-    -2px -2px #000, 2px -2px #000, -2px 2px #000, 2px 2px #000;
-}
-
-/* ornate gold frame: layered bevel + corner ornaments */
-.frame-gold {
-  position: relative;
-  background:
-    linear-gradient(180deg, #221a3c 0%, #181230 100%);
-  border: 3px solid #c9962e;
-  outline: 2px solid #6b4f1f;
-  outline-offset: 2px;
-  box-shadow:
-    inset 0 0 0 2px #f2c14e,
-    inset 3px 3px 0 rgba(255, 230, 160, 0.12),
-    inset -3px -3px 0 rgba(0, 0, 0, 0.5),
-    6px 6px 0 rgba(0, 0, 0, 0.55);
-}
-.frame-gold::before,
-.frame-gold::after {
-  content: "";
-  position: absolute;
-  width: 12px;
+/* ============ ATB STAT BAR ============ */
+.atb-track {
   height: 12px;
-  background:
-    radial-gradient(circle at center, #f2c14e 38%, #8a6d3a 40%, transparent 60%);
-  z-index: 2;
+  background: #0a0e28;
+  border: 2px solid rgba(244, 244, 252, 0.6);
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.6);
 }
-.frame-gold::before { top: -7px; left: -7px; box-shadow: calc(100% + 14px) 0 0 #8a6d3a00; }
-.frame-gold::after { bottom: -7px; right: -7px; }
-/* extra two corners via a child .frame-studs */
-.frame-studs::before,
-.frame-studs::after {
-  content: "";
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background: radial-gradient(circle at center, #f2c14e 38%, #8a6d3a 40%, transparent 60%);
-  z-index: 2;
-}
-.frame-studs::before { top: -7px; right: -7px; }
-.frame-studs::after { bottom: -7px; left: -7px; }
-
-/* Final Fantasy style beveled blue window */
-.win-ff {
-  background: linear-gradient(180deg, #1b3a8c 0%, #0e2056 100%);
-  border: 2px solid #eaf2ff;
-  border-radius: 6px;
-  box-shadow:
-    inset 0 0 0 2px #2b56b5,
-    inset 0 0 14px rgba(120, 170, 255, 0.25),
-    0 6px 0 rgba(0, 0, 0, 0.5);
-  color: #eaf2ff;
-}
-
-/* dialogue box (Dragon Quest: black bg, white border) + continue triangle */
-.dialogue {
-  background: rgba(6, 5, 14, 0.96);
-  border: 3px solid #ece8ff;
-  box-shadow: 0 0 0 3px #000, inset 0 0 0 1px rgba(255,255,255,0.15);
-}
-.tri {
+.atb-fill {
+  height: 100%;
   width: 0;
-  height: 0;
+  border-radius: 1px;
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, transparent 45%);
+}
+
+/* ============ DIALOGUE BOX ============ */
+.ff-dialogue {
+  background: linear-gradient(135deg, var(--win-tl) 0%, var(--win-br) 100%);
+  border: 3px solid var(--win-border);
+  border-radius: 10px;
+  box-shadow:
+    inset 2px 2px 0 rgba(255,255,255,0.22),
+    inset -2px -2px 0 rgba(16,16,56,0.5),
+    0 8px 24px rgba(0,0,0,0.6);
+}
+.tri-more {
+  width: 0; height: 0;
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
-  border-top: 10px solid #ece8ff;
-  animation: triBob 0.8s steps(2) infinite;
+  border-top: 9px solid var(--gold);
+  filter: drop-shadow(1px 1px 0 var(--gold-deep));
+  animation: triBob 0.7s steps(2) infinite;
 }
-@keyframes triBob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(3px); }
-}
+@keyframes triBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(3px)} }
 
-/* cursor pointer ► for menus */
-.cursor-ptr {
-  display: inline-block;
-  color: var(--rpg-gold);
-  animation: ptr 0.6s steps(2) infinite;
-}
-@keyframes ptr {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
-}
+.blink { animation: blink 1s steps(2, start) infinite; }
+@keyframes blink { to { opacity: 0; } }
 
-/* main-menu overlay */
-.menu-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 120;
-  background: rgba(6, 5, 14, 0.82);
-  backdrop-filter: blur(3px);
-}
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 1rem;
+/* ============ PIXEL BUTTON (windowed) ============ */
+.ff-btn {
+  font-family: var(--font-pixel), monospace;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 var(--gold-deep);
+  background: linear-gradient(135deg, #2a44a8, #101a48);
+  border: 2px solid var(--win-border);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.2), inset -1px -1px 0 rgba(16,16,56,0.5);
+  transition: filter 0.12s, transform 0.08s steps(2);
   cursor: pointer;
-  color: var(--muted);
-  transition: color 0.1s, background 0.1s;
 }
-.menu-item[data-active="true"] {
-  color: var(--ink);
-  background: rgba(242, 193, 78, 0.12);
-}
+.ff-btn:hover { filter: brightness(1.25); transform: translateY(-1px); }
 
-/* screen-wipe flash for section transitions */
-.flash {
-  position: fixed;
-  inset: 0;
-  z-index: 110;
-  background: #fff;
-  opacity: 0;
-  pointer-events: none;
+/* ============ AMBIENCE OVERLAYS ============ */
+.scanlines {
+  position: fixed; inset: 0; z-index: 85; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.14), rgba(0,0,0,0.14) 1px, transparent 2px, transparent 4px);
+  mix-blend-mode: multiply; opacity: 0.45;
 }
-
-/* vignette to focus the world */
 .vignette {
-  position: fixed;
+  position: fixed; inset: 0; z-index: 84; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.6) 100%);
+}
+.starfield { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+/* ============ WORLD MAP ============ */
+.ocean {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(120, 160, 255, 0.25), transparent 55%),
+    linear-gradient(160deg, #3858c8 0%, #1c2e78 55%, #101a48 100%);
+  overflow: hidden;
+}
+/* subtle ocean ripple texture */
+.ocean::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background-image: repeating-linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.05) 0 2px,
+    transparent 2px 9px
+  );
+  opacity: 0.4;
+  animation: oceanDrift 14s linear infinite;
+}
+@keyframes oceanDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(9px); }
+}
+/* pixel grain over the map */
+.ocean::after {
+  content: "";
+  position: absolute;
   inset: 0;
-  z-index: 80;
+  background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+  opacity: 0.3;
   pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
 }
 
-/* boot / title screen */
-.boot {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #050309;
+.map-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
   cursor: pointer;
+  z-index: 3;
 }
+.map-dot {
+  width: 11px;
+  height: 11px;
+  background: var(--gold);
+  border: 2px solid #fff8e0;
+  box-shadow: 0 0 6px rgba(240, 192, 64, 0.9), 1px 1px 0 var(--gold-deep);
+  transform: rotate(45deg);
+}
+.map-node.is-on .map-dot {
+  animation: nodePing 0.7s steps(2) infinite;
+  background: #fff;
+}
+@keyframes nodePing {
+  0%, 100% { box-shadow: 0 0 6px rgba(240,192,64,0.9); }
+  50% { box-shadow: 0 0 16px 4px rgba(240,192,64,1); }
+}
+.map-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-family: var(--font-pixel), monospace;
+  font-size: 0.9rem;
+  color: #fff;
+  text-shadow: 1px 1px 0 #101038, -1px 0 0 #101038, 0 1px 0 #101038;
+  pointer-events: none;
+}
+.map-label--r { left: 15px; }
+.map-label--l { right: 15px; text-align: right; }
+.map-node.is-on .map-label { color: var(--gold); }
+.map-label--ambient { color: var(--ink-dim); font-size: 0.78rem; opacity: 0.75; }
 
-/* starfield canvas sits behind everything */
-.starfield {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
+.map-logo {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  z-index: 3;
+  font-family: var(--font-display), serif;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 2px 2px 0 #101038;
   pointer-events: none;
 }
 
-/* lock scroll before boot */
+/* boot / title */
+.boot {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--bg-void); cursor: pointer;
+}
 .locked { overflow: hidden; height: 100vh; }
 
-/* reduce motion */
+/* scene wipe flash */
+.flash { position: fixed; inset: 0; z-index: 110; background: #f4f4fc; opacity: 0; pointer-events: none; }
+
+/* menu overlay */
+.menu-overlay {
+  position: fixed; inset: 0; z-index: 120;
+  background: rgba(6, 5, 14, 0.82); backdrop-filter: blur(3px);
+}
+
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--bg-void-2); }
+::-webkit-scrollbar-thumb { background: var(--win-bl); border: 2px solid var(--bg-void); border-radius: 6px; }
+
 @media (prefers-reduced-motion: reduce) {
-  *, *::after, *::before { animation: none !important; }
+  *, *::before, *::after { animation: none !important; }
   html { scroll-behavior: auto; }
 }

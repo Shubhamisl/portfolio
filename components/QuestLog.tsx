@@ -1,40 +1,33 @@
 import { quests } from "@/lib/data";
-import Section from "./Section";
-import Reveal from "./Reveal";
+import SectionShell from "./SectionShell";
+import FFWindow from "./FFWindow";
 
 export default function QuestLog() {
   return (
-    <Section id="quests" banner="✦ QUEST LOG" sub="Work experience // missions accepted">
-      <Reveal stagger className="space-y-6">
+    <SectionShell id="quests" title="⚑ Quest Log">
+      <div className="space-y-6 border-l-2 border-[var(--gold)] pl-5">
         {quests.map((q) => (
-          <article key={q.org} className="frame-gold frame-studs p-6">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <span
-                className={`font-pixel text-[0.55rem] px-2 py-1 ${
-                  q.rank === "MAIN QUEST"
-                    ? "text-[var(--rpg-gold)] border border-[var(--rpg-gold)]"
-                    : "text-[var(--rpg-mp)] border border-[var(--rpg-mp)]"
-                }`}
-              >
-                {q.rank}
-              </span>
-              <span className="text-lg text-[var(--muted)]">{q.period}</span>
+          <FFWindow key={q.org} title={q.rank} glow>
+            <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+              <div>
+                <h3 className="font-display text-2xl font-bold text-[var(--ink)] shadow-ink">
+                  {q.role}
+                </h3>
+                <p className="font-pixel text-lg text-[var(--mp-blue)] shadow-ink">@ {q.org}</p>
+              </div>
+              <span className="font-pixel text-base text-[var(--gold)] shadow-gold">{q.period}</span>
             </div>
-
-            <h3 className="mt-4 font-pixel text-[0.85rem] text-[var(--ink)]">{q.role}</h3>
-            <p className="mt-1 text-xl text-[var(--rpg-xp)]">@ {q.org}</p>
-
-            <ul className="mt-4 space-y-3">
+            <ul className="ff-sub space-y-3 p-4">
               {q.log.map((line, i) => (
-                <li key={i} className="flex gap-3 text-xl leading-snug text-[var(--muted)]">
-                  <span className="mt-1 text-[var(--rpg-gold)]">▸</span>
+                <li key={i} className="flex gap-3 font-body text-xl leading-snug text-[var(--ink)]">
+                  <span className="mt-1 text-[var(--gold)]">▸</span>
                   <span>{line}</span>
                 </li>
               ))}
             </ul>
-          </article>
+          </FFWindow>
         ))}
-      </Reveal>
-    </Section>
+      </div>
+    </SectionShell>
   );
 }

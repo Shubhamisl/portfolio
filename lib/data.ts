@@ -15,15 +15,15 @@ export const hero = {
 export const contacts = {
   phone: "+91 8287359082",
   email: "shubhamzy82@gmail.com",
-  linkedin: "#",
-  github: "#",
+  linkedin: "https://www.linkedin.com/in/shubhamisl/",
+  github: "https://github.com/shubhamisl",
 };
 
-// Each "stat" is a skill category. value = 0-100 RPG bar.
+// Each "stat" is a skill category. value = 0-100 ATB-style bar. Grouped under gold sub-bars.
 export type Stat = {
   key: string;
   label: string;
-  abbr: string;
+  group: string;
   value: number;
   color: string;
   items: string[];
@@ -33,9 +33,9 @@ export const stats: Stat[] = [
   {
     key: "agentic",
     label: "Agentic AI / LLM",
-    abbr: "INT",
+    group: "MAGITEK (AI)",
     value: 92,
-    color: "var(--rpg-mp)",
+    color: "var(--magic-violet)",
     items: [
       "OpenAI API",
       "Anthropic Claude API (tool use, agents)",
@@ -48,59 +48,59 @@ export const stats: Stat[] = [
     ],
   },
   {
+    key: "aiflow",
+    label: "AI Dev Workflow",
+    group: "MAGITEK (AI)",
+    value: 89,
+    color: "var(--magic-violet)",
+    items: ["Cursor", "Claude Code", "GitHub Copilot", "MCP awareness", "AI-assisted code review"],
+  },
+  {
+    key: "languages",
+    label: "Languages",
+    group: "ARCANA (LANGUAGES)",
+    value: 90,
+    color: "var(--gold)",
+    items: ["Python", "TypeScript", "JavaScript", "SQL", "HTML5", "CSS3"],
+  },
+  {
     key: "frontend",
     label: "Frontend",
-    abbr: "DEX",
+    group: "FRONTEND",
     value: 88,
-    color: "var(--rpg-xp)",
+    color: "var(--hp-green)",
     items: ["React", "Next.js (App Router)", "Vite", "Tailwind CSS", "PWA", "Service Workers"],
   },
   {
     key: "backend",
     label: "Backend",
-    abbr: "STR",
+    group: "BACKEND",
     value: 86,
-    color: "var(--rpg-hp)",
+    color: "var(--mp-blue)",
     items: ["FastAPI", "REST APIs", "Next.js server actions", "async I/O", "authentication flows"],
-  },
-  {
-    key: "languages",
-    label: "Languages",
-    abbr: "WIS",
-    value: 90,
-    color: "var(--rpg-gold)",
-    items: ["Python", "TypeScript", "JavaScript", "SQL", "HTML5", "CSS3"],
   },
   {
     key: "data",
     label: "Data",
-    abbr: "VIT",
+    group: "BACKEND",
     value: 84,
-    color: "var(--rpg-cyan)",
+    color: "var(--mp-blue)",
     items: ["PostgreSQL", "Supabase (Auth, Storage, RLS)", "Firebase Firestore", "Redis", "pgvector", "ChromaDB"],
   },
   {
     key: "infra",
     label: "Infra & DevOps",
-    abbr: "CON",
+    group: "TRIALS (OPS & TEST)",
     value: 80,
-    color: "var(--rpg-purple)",
+    color: "var(--exp-amber)",
     items: ["Docker", "Celery", "Vercel", "Firebase Hosting", "Git/GitHub"],
-  },
-  {
-    key: "aiflow",
-    label: "AI Dev Workflow",
-    abbr: "LCK",
-    value: 89,
-    color: "var(--rpg-mp)",
-    items: ["Cursor", "Claude Code", "GitHub Copilot", "MCP awareness", "AI-assisted code review"],
   },
   {
     key: "testing",
     label: "Testing",
-    abbr: "FTH",
+    group: "TRIALS (OPS & TEST)",
     value: 78,
-    color: "var(--rpg-xp)",
+    color: "var(--exp-amber)",
     items: ["pytest", "httpx", "Vitest", "Playwright"],
   },
 ];
